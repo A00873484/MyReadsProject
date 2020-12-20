@@ -1,24 +1,41 @@
-const SearchPage = () => (
-    <div className="search-books">
-        <div className="search-books-bar">
-            <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
-            <div className="search-books-input-wrapper">
-            {/*
-                NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                You can find these search terms here:
-                https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { search } from '../BooksAPI.js'
+import BookItem from '../components/BookItem.js';
 
-                However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                you don't find a specific author or title. Every search is limited by search terms.
-            */}
-            <input type="text" placeholder="Search by title or author"/>
+class SearchPage extends Component {
+    
+    state = {
+        books:[]
+    }
 
+    doSearch = (e) => {
+        let searchItem = e.target.value;
+        search(searchItem).then((res)=>{
+            this.setState({books:Array.isArray(res)?res:[]});
+            console.log(res);
+        });
+    }
+    render(){
+        return (
+        <div className="search-books">
+            <div className="search-books-bar">
+                <Link className="close-search" to="/">Close</Link>
+                <div className="search-books-input-wrapper">
+                    <input type="text" placeholder="Search by title or author" onChange={this.doSearch}/>
+                </div>
             </div>
-        </div>
-        <div className="search-books-results">
-            <ol className="books-grid"></ol>
-        </div>
-    </div>
-)
+            <div className="search-books-results">
+                <ol className="books-grid">
+                    {
+                        this.state.books&&this.state.books.map((book)=>(<li key={book.id}>
+                            <BookItem id={book.id} title={book.title} authors={book.authors} image={book.imageLinks?book.imageLinks.thumbnail:""} isSelected={book.shelf} updateShelf={this.props.updateShelf}/>
+                        </li>))
+                    }
+                </ol>
+            </div>
+        </div>)
+    }
+}
 
 export default SearchPage;
