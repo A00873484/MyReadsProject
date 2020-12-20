@@ -6,8 +6,6 @@ import SearchPage from './pages/SearchPage'
 import BookListPage from './pages/BookListPage'
 import './App.css'
 
-const bookStatus = ['currentlyReading', 'wantToRead', 'read', 'none']
-
 class BooksApp extends React.Component {
   
   state = {
