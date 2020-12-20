@@ -11,11 +11,28 @@ class SearchPage extends Component {
 
     doSearch = (e) => {
         let searchItem = e.target.value;
-        search(searchItem).then((res)=>{
-            this.setState({books:Array.isArray(res)?res:[]});
-            console.log(res);
-        });
+        if(searchItem === "")
+            this.setState({books:[]});
+        else {
+            search(searchItem).then((res)=>{
+                this.setState({books:Array.isArray(res)?res:[]});
+                //console.log(res);
+
+                this.myBooks(Array.isArray(res)?res:[]);
+            });
+        }
     }
+
+    myBooks = (books) => {
+        let interlap = books.map((book)=>{
+            let found = this.props.myBooks.find((book2)=>(book.id===book2.id));
+            if(found)
+                return found;
+            return book;
+        });
+        this.setState({books:interlap});
+    }
+
     render(){
         return (
         <div className="search-books">

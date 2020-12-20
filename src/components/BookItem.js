@@ -8,7 +8,6 @@ const BookItem = ({id, title, authors, image, isSelected='none', updateShelf}) =
         let selected = e.target.value;
         get(id).then((res)=>{
             update(res, selected).then((res)=>{
-                console.log(res);
                 updateShelf();
             });
         });
